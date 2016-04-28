@@ -1,26 +1,31 @@
+#include <cstdlib>
 #include <ncurses.h>
 
-#include "input.h"
+#include "env.h"
+#include "seq.h"
 
 int main() {
-    int ch;
-    int h, w;
-
-    initscr();  //  start curses mode
-    raw();      //  disable line buffering (Ctrl+c/z are passed to
-                //      programm, w/o generating a signal
-    keypad(stdscr, TRUE);   // grab F1, F2, tec.
-    noecho();   // don't print while getch();
-
+    // window stuff
+    initscr();
+    raw();
+    keypad(stdscr, TRUE);
+    noecho();
+    int w, h;
     getmaxyx(stdscr, h, w);
-    // attron(A_STANDOUT);
-    
-  
-    ch = -999; 
-    while(getinput(ch)) {
-        ch = getch();
-    } 
-    endwin();   // end curses mode
 
-    return 0;
-};  // main()
+    refresh();    
+    Env* subEnv = new seqEnv(0.1 * w, 0.1 * h, 4*16, 8);
+
+    getch();
+    Seq* seq = new Seq(0, 16, 2);
+    for(int i=0; i<16*2; i++) {
+        seq->addEvent(std::rand() % 16, std::rand() % 2, (int)'x');
+       
+    };
+    ((seqEnv*)subEnv)->drawSeq(seq);
+
+    getch();
+    endwin();
+
+    delete seq;
+};

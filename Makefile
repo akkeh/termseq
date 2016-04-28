@@ -4,7 +4,7 @@ CFLAGS = -Wall -lao -ldl -lm -lncurses
 
 
 
-OBJ = main.cpp input.cpp util.cpp cmnd.cpp
+OBJ = main.cpp seq.cpp env.cpp #input.cpp util.cpp cmnd.cpp env.cpp curs.cpp
 all: termseq
 
 termseq: ${OBJ}
